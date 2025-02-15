@@ -21,30 +21,31 @@ st.markdown(
         color: #1F51FF !important;
         text-align: center;
     }
-    .rap-output {
+    .lyrics-output {
         background-color: #F0F2F6;
         padding: 20px;
         border-radius: 10px;
         margin-top: 20px;
+        white-space: pre-line; /* Preserve line breaks in lyrics */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-st.markdown('<p class="title">🎤 Rap Song Generator 🎤</p>', unsafe_allow_html=True)
+st.markdown('<p class="title">🎤 Rap Lyrics Generator - VK 🎤</p>', unsafe_allow_html=True)
 st.markdown(
-    '<p class="subheader">Generate rap songs in the style of famous artists using Generative AI 🎶</p>',
+    '<p class="subheader">Generate 🔥 rap lyrics in the style of your favorite artists using AI 🎶</p>',
     unsafe_allow_html=True
 )
 
-# Create prompt template for generating rap songs
-rap_template = """
-Write a {length}-line rap song in the style of {artist} about {theme}.
+# Create prompt template for generating rap lyrics
+lyrics_template = """
+Write {length} lines of rap lyrics in the style of {artist} about {theme}.
 """
 
-rap_prompt = PromptTemplate(
-    template=rap_template,
+lyrics_prompt = PromptTemplate(
+    template=lyrics_template,
     input_variables=['length', 'artist', 'theme']
 )
 
@@ -52,25 +53,25 @@ rap_prompt = PromptTemplate(
 gemini_model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest")
 
 # Create LLM chain using the prompt template and model
-rap_chain = LLMChain(llm=gemini_model, prompt=rap_prompt)
+lyrics_chain = LLMChain(llm=gemini_model, prompt=lyrics_prompt)
 
 # Streamlit UI
-st.markdown("### 🎨 Customize Your Rap Song")
-theme = st.text_input("Enter the theme of the rap song (e.g., struggle, success, love): 🎯")
+st.markdown("### 🎨 Customize Your Rap Lyrics")
+theme = st.text_input("Enter the theme of the rap lyrics (e.g., struggle, success, love): 🎯")
 artist = st.selectbox(
     "Choose the artist's style: 🎤",
     ["Eminem", "Tupac", "Snoop Dogg", "Kendrick Lamar", "Nicki Minaj", "Custom"]
 )
-length = st.slider("Number of lines in the rap song: 📏", min_value=4, max_value=20, value=8, step=2)
+length = st.slider("Number of lines in the rap lyrics: 📏", min_value=4, max_value=20, value=8, step=2)
 
-if st.button("Generate Rap Song 🎶", key="generate_button"):
+if st.button("Generate Rap Lyrics 🎶", key="generate_button"):
     if theme and artist and length:
-        # Invoke the chain to generate the rap song
-        with st.spinner("Generating your rap song... 🎤"):
-            rap_song = rap_chain.run({"length": length, "artist": artist, "theme": theme})
+        # Invoke the chain to generate the rap lyrics
+        with st.spinner("Generating your rap lyrics... 🎤"):
+            rap_lyrics = lyrics_chain.run({"length": length, "artist": artist, "theme": theme})
         
-        # Display the generated rap song with styling
-        st.markdown("### 🎤 Your Generated Rap Song:")
-        st.markdown(f'<div class="rap-output">{rap_song}</div>', unsafe_allow_html=True)
+        # Display the generated rap lyrics with styling
+        st.markdown("### 🎤 Your Generated Rap Lyrics:")
+        st.markdown(f'<div class="lyrics-output">{rap_lyrics}</div>', unsafe_allow_html=True)
     else:
         st.error("❌ Please provide a theme, artist, and length.")
